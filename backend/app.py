@@ -6,7 +6,8 @@ import os
 from preprocess import preprocess_image
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "https://mnist-predictor.vercel.app"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "*"}})
+
 
 # Load model once at startup
 model = tf.keras.models.load_model("mnist_cnn.h5")
