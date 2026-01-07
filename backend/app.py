@@ -10,7 +10,7 @@ CORS(app)
 
 # Load model once at startup
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "mnist_cnn.h5")
-model = tf.keras.models.load_model(MODEL_PATH)
+model = tf.keras.models.load_model("mnist_cnn.h5")
 print("✅ MNIST model loaded")
 
 @app.route("/health", methods=["GET"])
