@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MNIST Digit Recognizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    input[type="file"] {
+      margin-bottom: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background: black;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background: #333;
+    }
+
+    .result {
+      margin-top: 20px;
+    }
+
+    .digit {
+      font-size: 48px;
+      font-weight: bold;
+    }
+
+    .confidence {
+      color: #555;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h1>Digit Recognizer</h1>
+
+    <input type="file" id="imageInput" accept="image/*" />
+
+    <button onclick="predictDigit()">Upload & Predict</button>
+
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    async function predictDigit() {
+      const input = document.getElementById('imageInput');
+      const resultDiv = document.getElementById('result');
+
+      if (!input.files.length) {
+        alert('Please select an image');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('image', input.files[0]);
+
+      resultDiv.innerHTML = 'Predicting...';
+
+      try {
+        const response = await fetch('http://127.0.0.1:5000/predict', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await response.json();
+
+        resultDiv.innerHTML = `
+          <div class="digit">${data.prediction}</div>
+          <div class="confidence">Confidence: ${(data.confidence * 100).toFixed(2)}%</div>
+        `;
+      } catch (error) {
+        resultDiv.innerHTML = 'Error connecting to backend';
+      }
+    }
+  </script>
+
+</body>
+</html>
