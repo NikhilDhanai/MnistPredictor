@@ -6,7 +6,7 @@ import os
 from preprocess import preprocess_image
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://mnist-predictor.vercel.app/"}}, supports_credentials=True)
 
 # Load model once at startup
 MODEL_PATH = os.path.join(os.path.dirname(__file__), "..", "model", "mnist_cnn.h5")
